@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+	@apply min-w-[1280px]
+}
+
+.btn {
+	@apply w-[300px] bg-stone-900 text-white font-bold py-2 px-4 rounded-lg border-4 border-white shadow-lg opacity-80 hover:opacity-100 uppercase text-center;
+}
+
+.btn.active{
+	@apply opacity-100;
+}
+
+.btn_secondary{
+	@apply bg-stone-900 text-white font-bold py-2 px-4 rounded-lg border-2 border-white shadow-lg scale-95 hover:scale-105 duration-200;
+}
+
+.input{ 
+	@apply rounded p-2 border-none;
+}
+
+.gm-style .gm-style-iw-c{
+	top: -65px;
+}
+
+.gm-style .gm-style-iw-tc{
+	top: -65px;
+}

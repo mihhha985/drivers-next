@@ -9,7 +9,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import DriversType from '@/components/DriversType';
 import SearchCity from '@/components/SearchCity';
 
-const THIRTY_MINUTES = 30 * 60 * 1000; // 30 минут в миллисекундах
+const THIRTY_MINUTES = 30 * 60; // 30 минут в секундах
 
 export default function Home() {
 	const db = getDatabase();
@@ -22,22 +22,22 @@ export default function Home() {
 			const data = snapshot.val();
 			const dataArr = Object.values(data);
 
-			//console.log(dataArr);
 			//сортировкка по доступности
-			const sortedItem = dataArr.filter((item: any) => item.state !== "" && item.timestamp) as IDriversData[];
+			const sortedItem = dataArr.filter((item: any) => item.state && item.state !== "") as IDriversData[];
 
 			//console.log(sortedItem)
 			//сортировка по времени
 			const sortedByTime = sortedItem.map((item: any) => {
-    		const currentTime = Date.now(); // Текущее время в миллисекундах
-    		const elapsedTime = currentTime - item.timestamp; // Разница во времени
-   			if(elapsedTime >= THIRTY_MINUTES) return item;
+    		const currentTime = Math.round(Date.now() / 1000);
+    		const elapsedTime = currentTime - item.timestamp;
+				//console.log(elapsedTime);
+   			if(elapsedTime <= THIRTY_MINUTES) return item;
 			});
 
 			//console.log(sortedByTime);
 			//сортировка по типу
 			const sortedByType = sortedByTime.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
-			//console.log(sortedByType);
+			console.log(sortedByType);
 			if(sortedByType) setDriversData(sortedByType);
 		});
 	}, [currentDriversType]);

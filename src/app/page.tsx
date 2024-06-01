@@ -9,6 +9,8 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import DriversType from '@/components/DriversType';
 import SearchCity from '@/components/SearchCity';
 
+const THIRTY_MINUTES = 30 * 60 * 1000; // 30 минут в миллисекундах
+
 export default function Home() {
 	const db = getDatabase();
 	const starCountRef = ref(db, 'Drivers');
@@ -19,9 +21,24 @@ export default function Home() {
 		onValue(starCountRef, (snapshot) => {
 			const data = snapshot.val();
 			const dataArr = Object.values(data);
-			console.log(dataArr);
-			const sortedItem = dataArr.filter((item: any) => item.carCurrent === currentDriversType) as IDriversData[];
-			if(sortedItem) setDriversData(sortedItem);
+
+			//console.log(dataArr);
+			//сортировкка по доступности
+			const sortedItem = dataArr.filter((item: any) => item.state !== "" && item.timestamp) as IDriversData[];
+
+			//console.log(sortedItem)
+			//сортировка по времени
+			const sortedByTime = sortedItem.map((item: any) => {
+    		const currentTime = Date.now(); // Текущее время в миллисекундах
+    		const elapsedTime = currentTime - item.timestamp; // Разница во времени
+   			if(elapsedTime >= THIRTY_MINUTES) return item;
+			});
+
+			//console.log(sortedByTime);
+			//сортировка по типу
+			const sortedByType = sortedByTime.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
+			//console.log(sortedByType);
+			if(sortedByType) setDriversData(sortedByType);
 		});
 	}, [currentDriversType]);
 
@@ -48,7 +65,7 @@ export default function Home() {
 
 					<div className='flex items-center gap-x-2'>
 						<Image src="/logo.png" width={60} height={60} alt="logo" />
-						<h1 className='text-white font-extrabold text-2xl relative top-1'>ATK Поиск</h1>
+						<h1 className='text-white font-extrabold text-2xl relative top-1'>ATK поиск</h1>
 					</div>
 
 					<SearchCity />
@@ -63,7 +80,7 @@ export default function Home() {
 				
 				<DriversType set={setCurrentDriversType} currentType={currentDriversType}/>
 
-				<Map data={driversData} />
+				<Map data={driversData} type={currentDriversType}/>
 
 			</div>
 

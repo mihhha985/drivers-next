@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { IDriversData } from '@/types/drivers';
+import { IDriversData, ButtonDriversType} from '@/types/drivers';
 import { Point } from "@/types/map";
 import {Map, AdvancedMarker, InfoWindow, useMap} from '@vis.gl/react-google-maps';
 
@@ -17,7 +17,7 @@ const getMarker = (marker: IDriversData):string => {
 	return path;
 }
 
-const MapComponent = ({data}: {data:IDriversData[]|null}) => {
+const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriversType}) => {
 	const map = useMap();
 	const [open, setOpen] = useState<boolean>(false);
 	const [position, setPosition] = useState<Point>({lat: 0, lng: 0});
@@ -38,8 +38,18 @@ const MapComponent = ({data}: {data:IDriversData[]|null}) => {
 		} else {
 			console.log("Geolocation не поддерживается вашим браузером.");
 		}
+
+		return () => {	
+			handleClose();
+		}
 		
 	}, [map]);
+
+	useEffect(() => {
+		return () => {	
+			handleClose();
+		}
+	}, [type]);
 
 
 	const handleOpen = (lat: number, lng: number, phone:string, name:string, also:string) => {
@@ -68,16 +78,14 @@ const MapComponent = ({data}: {data:IDriversData[]|null}) => {
 				fullscreenControl={false}
 			>
 				{data && data.map((marker, index) => {
-					if(marker.state) {
-						return (
-							<AdvancedMarker 
-								key={index}
-								onClick={() => handleOpen(marker.lat, marker.lon, marker.phone, marker.name, marker.also)}	
-								position={{lat: marker.lat, lng: marker.lon}}>
-								<Image src={getMarker(marker)} width={60} height={60} alt="marker" />
-							</AdvancedMarker>
-						);
-					}
+					return (
+						<AdvancedMarker 
+							key={index}
+							onClick={() => handleOpen(marker.lat, marker.lon, marker.phone, marker.name, marker.also)}	
+							position={{lat: marker.lat, lng: marker.lon}}>
+							<Image src={getMarker(marker)} width={60} height={60} alt="marker" />
+						</AdvancedMarker>
+					);
 				})}
 
 				{open && 

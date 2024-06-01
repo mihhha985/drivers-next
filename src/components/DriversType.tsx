@@ -37,7 +37,7 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 			</div>
 
 			<div className='mt-auto h-24 flex items-center justify-center bg-gradient-to-r from-dark-red to-light-red'>
-				<a href="https://t.me/ATKpoiskzakazy" target="_blank" className="btn">Заказать грузовик</a>
+				<a href="https://t.me/ATKpoiskzakazy" target="_blank" className="btn">оставить заявку</a>
 			</div>
 
 		</div>

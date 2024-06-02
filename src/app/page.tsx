@@ -20,13 +20,14 @@ export default function Home() {
 	useEffect(() => {
 		onValue(starCountRef, (snapshot) => {
 			const data = snapshot.val();
-			const dataArr = Object.values(data);
-
+			const dataArr = Object.values(data) as IDriversData[];
+			//console.log(dataArr);
 			//сортировкка по доступности
 			const sortedItem = dataArr.filter((item: any) => item.state && item.state !== "") as IDriversData[];
 
 			//console.log(sortedItem)
 			//сортировка по времени
+			
 			const sortedByTime = sortedItem.map((item: any) => {
     		const currentTime = Math.round(Date.now() / 1000);
     		const elapsedTime = currentTime - item.timestamp;

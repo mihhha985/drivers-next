@@ -53,6 +53,7 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 
 
 	const handleOpen = (lat: number, lng: number, phone:string, name:string, also:string) => {
+		if(!lat || !lng || !phone || !name) return;
 		setPosition({lat, lng});
 		setPhone(phone);
 		setName(name);
@@ -78,6 +79,9 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 				fullscreenControl={false}
 			>
 				{data && data.map((marker, index) => {
+
+					if(!marker.lat || !marker.lon) return null;
+					
 					return (
 						<AdvancedMarker 
 							key={index}

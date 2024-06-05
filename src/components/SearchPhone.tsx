@@ -26,6 +26,7 @@ function SearchPhone(
 					alert('Водитель не в сети');
 					return;
 				}
+				
 				if(item.carCurrent !== currentType){
 					alert('Водитель в группе ' + item.carType);
 					return;

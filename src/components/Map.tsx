@@ -74,7 +74,7 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 			<Map
 				style={{width: '100%', height: '100%'}}
 				defaultCenter={defaultCenter}
-				defaultZoom={10}
+				defaultZoom={12}
 				mapId={`${process.env.googleMapId}`}
 				fullscreenControl={false}
 			>

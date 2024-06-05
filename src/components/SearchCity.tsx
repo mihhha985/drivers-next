@@ -52,7 +52,7 @@ const Input = () => {
 			const results = await getGeocode({address});
 			const {lat, lng} = getLatLng(results[0]);
 			map.setCenter({lat:lat, lng:lng});
-			map.setZoom(10);
+			map.setZoom(12);
 		} catch (error) {
 			console.log(error);
 		}

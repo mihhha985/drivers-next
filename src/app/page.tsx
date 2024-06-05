@@ -8,6 +8,7 @@ import SearchPhone from '@/components/SearchPhone';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import DriversType from '@/components/DriversType';
 import SearchCity from '@/components/SearchCity';
+import Banner from '@/components/Banner';
 
 const THIRTY_MINUTES = 30 * 60; // 30 минут в секундах
 
@@ -84,6 +85,8 @@ export default function Home() {
 				<Map data={driversData} type={currentDriversType}/>
 
 			</div>
+
+			<Banner />
 
 		</APIProvider>
   )

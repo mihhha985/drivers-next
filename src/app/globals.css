@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 body{
-	@apply min-w-[1280px]
+	@apply min-w-[360px] text-stone-900;
 }
 
 .btn {
-	@apply w-[300px] bg-stone-900 text-white font-bold py-2 px-4 rounded-lg border-4 border-white shadow-lg opacity-80 hover:opacity-100 uppercase text-center;
+	@apply w-[260px] sm:w-[300px] bg-stone-800 hover:bg-stone-950 text-white font-bold py-2 px-4 rounded-lg border-4 border-white shadow-lg uppercase text-center;
 }
 
 .btn.active{
-	@apply opacity-100;
+	@apply bg-stone-950;
 }
 
 .btn_secondary{
@@ -28,4 +28,4 @@ body{
 
 .gm-style .gm-style-iw-tc{
 	top: -65px;
-}
+} 

@@ -1,18 +1,17 @@
 "use client"
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import { ButtonDriversType } from '@/types/drivers';
+import { TiThMenu, TiDelete  } from "react-icons/ti";
 import { getDatabase, ref, child, get } from "firebase/database";
 
 function DriversType({set, currentType}: {set:Function, currentType:ButtonDriversType}) {
 	const dbRef = ref(getDatabase());
 	const map = useMap();
+	const boxRef = useRef<HTMLDivElement>(null);
 	const [type, setType] = useState<ButtonDriversType>(currentType);
 	const [telegram, setTelegram] = useState<string>('');
-	const [baner, setBaner] = useState<string>('');
-	const [link, setLink] = useState<string>('');
-	const [close, setClose] = useState<boolean>(false);
+	const [isOpen, setIsOpen] = useState<boolean>(true);
 
 	useEffect(() => {
 		get(child(dbRef, 'Support'))
@@ -24,23 +23,6 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 		});
 	}, []);
 
-	useEffect(() => {
-		get(child(dbRef, 'Products/banner'))
-		.then((snapshot) => {
-			const data = snapshot.val();
-			setBaner(data.image);
-			setLink(data.link);
-		}).catch((error) => {
-			console.error(error);
-		});
-
-		const timer = setTimeout(() => {
-			setClose(true);
-		}, 10000);
-
-		return () => clearTimeout(timer);
-	}, []);
-
 	const setCurrentType = (type:ButtonDriversType):void => {
 		if(!map) return;
 
@@ -49,29 +31,35 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 		map.setZoom(12);
 	}
 
-	const handleClose = ():void => {
-		if(!close) return;
-
-		setBaner('');
-	}
+	const handleClick = ():void => {
+		if(boxRef.current) {
+			boxRef.current.classList.toggle('-translate-x-full');
+			setIsOpen(!isOpen);
+		}
+	}	
 	
 	return ( 
-		<div className='flex flex-col h-full row-span-11 col-span-3 relative'>
+		<>
+		<div className='flex flex-col absolute top-0 left-0 w-[300px] sm:w-[360px] h-full z-20 transition-transform duration-300' ref={boxRef}>
+
+			<div className='h-24 flex items-center justify-center bg-gradient-to-r from-dark-red to-light-red'>
+				<h1 className='text-2xl text-white'>Выберите т/c</h1>
+			</div>
 
 			<div className='flex-1 flex flex-col items-center justify-center gap-y-10 bg-hero-pattern bg-cover'>
 				<button 
 					className={`btn ${type === 'man' ? 'active' : ''}`} 
-					onClick={() => setCurrentType('man')}>
+					onClick={() => {setCurrentType('man'); handleClick()}}>
 					Манипулятор
 				</button>
 				<button 
 					className={`btn ${type === 'bort' ? 'active' : ''}`} 
-					onClick={() => setCurrentType('bort')}>
+					onClick={() => {setCurrentType('bort'); handleClick()}}>
 					Бортовой грузовик
 				</button>
 				<button 
 					className={`btn ${type === 'clos' ? 'active' : ''}`} 
-					onClick={() => setCurrentType('clos')}>
+					onClick={() => {setCurrentType('clos'); handleClick()}}>
 					Закрытый грузовик
 				</button>
 			</div>
@@ -79,14 +67,15 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 			<div className='mt-auto h-24 flex items-center justify-center bg-gradient-to-r from-dark-red to-light-red'>
 				<a href={telegram} target="_blank" className="btn">оставить заявку</a>
 			</div>
-			{baner &&
-				<div className='absolute inset-1 flex flex-col items-center justify-end gap-y-10 pb-20'>
-					<Image src={baner} alt='baner' sizes='100%' className='object-cover z-10' fill/>
-					<a className="btn relative z-20" href={link}>перейти</a>
-					<button className="btn relative z-20" onClick={handleClose}>закрыть</button>
-				</div>	
+			{isOpen 
+				?
+				<TiDelete className='text-6xl text-white absolute top-0 -right-14 cursor-pointer' onClick={handleClick}/>
+				:
+				<TiThMenu className='text-5xl text-white absolute top-0 -right-14 cursor-pointer' onClick={handleClick}/>
 			}
 		</div>
+		{isOpen && <div className='fixed sm:hidden inset-0 bg-black/80 flex justify-center items-center z-10'></div>}
+		</>
 	);
 }
 

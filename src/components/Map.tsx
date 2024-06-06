@@ -70,13 +70,15 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 	}
 
 	return (
-		<div className='row-span-11 col-span-9'>
 			<Map
 				style={{width: '100%', height: '100%'}}
 				defaultCenter={defaultCenter}
 				defaultZoom={12}
 				mapId={`${process.env.googleMapId}`}
 				fullscreenControl={false}
+				streetViewControl={false}
+				mapTypeControl={false}
+				zoomControl={false}
 			>
 				{data && data.map((marker, index) => {
 
@@ -104,7 +106,6 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 					</InfoWindow>
 				}
 			</Map>
-  	</div>
 	)
 }
 

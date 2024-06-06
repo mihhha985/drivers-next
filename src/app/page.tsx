@@ -61,9 +61,9 @@ export default function Home() {
   return (
 		<APIProvider apiKey={`${process.env.googleMapApiKey}`}>
 			
-			<div className='h-screen grid grid-rows-12 grid-cols-12'>
+			<div className='h-screen flex flex-col'>
 
-				<header className='row-span-1 col-span-full flex items-center justify-between px-10 bg-gradient-to-r from-dark-red to-light-red'>
+				<header className='hidden sm:grid grid-cols-2 lg:flex items-center justify-between gap-1 px-5 xl:px-10 py-2 bg-gradient-to-r from-dark-red to-light-red'>
 
 					<div className='flex items-center gap-x-2'>
 						<Image src="/logo.png" width={60} height={60} alt="logo" />
@@ -79,10 +79,23 @@ export default function Home() {
 					<SearchPhone setData={setDriversData} currentRef={starCountRef} currentType={currentDriversType} />
 
 				</header>
-				
-				<DriversType set={setCurrentDriversType} currentType={currentDriversType}/>
 
-				<Map data={driversData} type={currentDriversType}/>
+				<div className='relative flex flex-col w-full h-full overflow-hidden'>
+
+					<div className='flex flex-col items-center w-full p-2 bg-gradient-to-r from-dark-red to-light-red sm:hidden'>
+						<SearchCity />
+						<h4 className='text-2xl text-white'>{currentDataValue()}</h4>
+					</div>
+
+					<Map data={driversData} type={currentDriversType}/>
+
+					<div className='flex flex-col items-center w-full p-2 bg-gradient-to-r from-dark-red to-light-red sm:hidden'>
+						<SearchPhone setData={setDriversData} currentRef={starCountRef} currentType={currentDriversType} />
+					</div>
+
+					<DriversType set={setCurrentDriversType} currentType={currentDriversType}/>
+
+				</div>
 
 			</div>
 

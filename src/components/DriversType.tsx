@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import { ButtonDriversType } from '@/types/drivers';
 import { TiThMenu, TiDelete  } from "react-icons/ti";
+import { IoClose, IoReorderThreeOutline } from "react-icons/io5";
 import { getDatabase, ref, child, get } from "firebase/database";
 
 function DriversType({set, currentType}: {set:Function, currentType:ButtonDriversType}) {
@@ -69,12 +70,20 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 			</div>
 			{isOpen 
 				?
-				<TiDelete className='text-6xl text-white absolute top-0 -right-14 cursor-pointer' onClick={handleClick}/>
+				<div 
+					className='flex items-center justify-center w-[50px] h-[50px] rounded-full bg-black absolute top-1 -right-14 cursor-pointer' 
+					onClick={handleClick}>
+					<IoClose className='text-5xl text-white'/>	
+				</div>
 				:
-				<TiThMenu className='text-5xl text-white absolute top-0 -right-14 cursor-pointer' onClick={handleClick}/>
+				<div 
+					className='flex items-center justify-center w-[50px] h-[50px] rounded-xl bg-black absolute top-1 -right-14 cursor-pointer' 
+					onClick={handleClick}>
+					<IoReorderThreeOutline className='text-5xl text-white' />
+				</div>
 			}
 		</div>
-		{isOpen && <div className='fixed sm:hidden inset-0 bg-black/80 flex justify-center items-center z-10'></div>}
+		{isOpen && <div className='fixed sm:hidden inset-0 bg-white/80 flex justify-center items-center z-10'></div>}
 		</>
 	);
 }

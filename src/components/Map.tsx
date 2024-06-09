@@ -100,7 +100,7 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 						onClose={handleClose}>
 						<div className='text-lg'>
 							<div><b>Имя: </b> {name}</div>
-							<div><b>Телефон: </b> {phone}</div>
+							<div><b>Телефон:</b> <a href={`tel:${phone}`}> {phone}</a></div>
 							<div><b>Оборудование: </b> {also}</div>
 						</div>
 					</InfoWindow>

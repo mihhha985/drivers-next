@@ -22,10 +22,15 @@ const Banner = () => {
 	}, []);
 
 	useEffect(() => {
+		if(localStorage.getItem('showBanner') === 'true') return;
+		
 		get(child(dbRef, 'checkbox'))
 		.then((snapshot) => {
 			const data = snapshot.val();
-			if(data.showBanner && data.showLinkButton) setShowBanner(true);
+			if(data.showBanner) {
+				setShowBanner(true);
+				localStorage.setItem('showBanner', 'true');
+			}
 		})
 		.catch((error) => {
 			console.error(error);

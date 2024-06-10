@@ -41,7 +41,7 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 	
 	return ( 
 		<>
-		<div className='flex flex-col absolute top-0 left-0 w-[300px] sm:w-[360px] h-full z-20 transition-transform duration-300' ref={boxRef}>
+		<div className='flex flex-col absolute top-0 left-0 w-[280px] sm:w-[360px] h-full z-20 transition-transform duration-300' ref={boxRef}>
 
 			<div className='h-24 flex items-center justify-center bg-gradient-to-r from-dark-red to-light-red'>
 				<h1 className='text-2xl text-white'>Выберите т/c</h1>
@@ -71,15 +71,17 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 			{isOpen 
 				?
 				<div 
-					className='flex items-center justify-center w-[50px] h-[50px] rounded-full bg-black absolute top-1 -right-14 cursor-pointer' 
+					className='flex items-center justify-center w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] rounded-full bg-black 
+					absolute top-1 -right-12 sm:-right-14 cursor-pointer' 
 					onClick={handleClick}>
-					<IoClose className='text-5xl text-white'/>	
+					<IoClose className='text-3xl sm:text-5xl text-white'/>	
 				</div>
 				:
 				<div 
-					className='flex items-center justify-center w-[50px] h-[50px] rounded-xl bg-black absolute top-1 -right-14 cursor-pointer' 
+					className='flex items-center justify-center w-[40px] sm:w-[50px] h-[40px] sm:h-[50px] rounded-xl bg-black 
+					absolute top-1 -right-12 sm:-right-14 cursor-pointer' 
 					onClick={handleClick}>
-					<IoReorderThreeOutline className='text-5xl text-white' />
+					<IoReorderThreeOutline className='text-3xl sm:text-5xl text-white' />
 				</div>
 			}
 		</div>

@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 80",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,6 +16,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "sharp": "^0.33.4",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {

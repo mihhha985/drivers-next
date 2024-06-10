@@ -4,6 +4,13 @@ import {getDatabase, child, get, off, ref } from "firebase/database";
 import type { IDriversData, ButtonDriversType } from "@/types/drivers";
 import { useMap } from "@vis.gl/react-google-maps";
 
+function cleanPhoneNumber(phoneNumber: string): string {
+	// Удаляем все символы, кроме цифр
+	let cleanedNumber = phoneNumber.replace(/\D/g, '');
+	// Возвращаем строку, начиная со второго символа
+	return cleanedNumber.substring(1);
+}
+
 function SearchPhone(
 	{setData, currentRef, currentType}: 
 	{setData:Function, currentRef:any, currentType:ButtonDriversType}) {
@@ -19,7 +26,7 @@ function SearchPhone(
 			const data = snapshot.val();
 			//console.log(data);
 			const dataArr = Object.values(data);
-			const item = dataArr.find((item: any) => item.phone === phone) as IDriversData;
+			const item = dataArr.find((item: any) => cleanPhoneNumber(item.phone) === cleanPhoneNumber(phone)) as IDriversData;
 			if(item) {
 				
 				if(!item.state){

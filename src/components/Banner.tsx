@@ -34,9 +34,9 @@ const Banner = () => {
 				get(child(dbRef, 'checkbox'))
 				.then((snapshot) => {
 					const data = snapshot.val();
-					if(data.showBanner) {
+					if(data && data.showBanner) {
 						const id = uuidv4();
-						if(data.showLinkButton) setShowButton(true);
+						if(data && data.showLinkButton) setShowButton(true);
 						setShowBanner(true);
 						localStorage.setItem('user', id);
 						set(ref(db, 'user/' + id), {

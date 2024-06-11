@@ -36,7 +36,7 @@ const Banner = () => {
 					const data = snapshot.val();
 					if(data.showBanner) {
 						const id = uuidv4();
-						if(data.showButton) setShowButton(true);
+						if(data.showLinkButton) setShowButton(true);
 						setShowBanner(true);
 						localStorage.setItem('user', id);
 						set(ref(db, 'user/' + id), {

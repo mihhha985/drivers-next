@@ -2,11 +2,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import { ButtonDriversType } from '@/types/drivers';
-import { TiThMenu, TiDelete  } from "react-icons/ti";
 import { IoClose, IoReorderThreeOutline } from "react-icons/io5";
 import { getDatabase, ref, child, get } from "firebase/database";
 
-function DriversType({set, currentType}: {set:Function, currentType:ButtonDriversType}) {
+function DriversType(
+	{set, currentType, setLoading}: 
+	{set:Function, currentType:ButtonDriversType, setLoading:Function}) {
 	const dbRef = ref(getDatabase());
 	const map = useMap();
 	const boxRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,12 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 
 		set(type);
 		setType(type);
-		map.setZoom(12);
+		map.setZoom(8);
+		setLoading(true)
+		setTimeout(() => {
+			setLoading(false);
+			map.setZoom(12);
+		}, 800);
 	}
 
 	const handleClick = ():void => {

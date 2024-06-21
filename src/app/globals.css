@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body{
-	@apply min-w-[340px] text-stone-900;
+	@apply min-w-[340px] text-stone-900 bg-slate-200;
 }
 
 .btn {

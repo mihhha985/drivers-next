@@ -17,6 +17,7 @@ export default function Home() {
 	const starCountRef = ref(db, 'Drivers');
 	const [currentDriversType, setCurrentDriversType] = useState<ButtonDriversType>('man');
 	const [driversData, setDriversData] = useState<IDriversData[]| null>(null);
+	const [isLoading, setIsLoading] = useState<boolean>(false)
 
 	useEffect(() => {
 		onValue(starCountRef, (snapshot) => {
@@ -87,13 +88,22 @@ export default function Home() {
 						<h4 className='text-2xl text-white'>{currentDataValue()}</h4>
 					</div>
 
-					<Map data={driversData} type={currentDriversType}/>
+					{isLoading 
+						?
+						<div className='w-full h-full bg-slate-200'></div>
+						:
+						<Map data={driversData} type={currentDriversType}/>
+					}
 
 					<div className='flex flex-col items-center w-full p-2 bg-gradient-to-r from-dark-red to-light-red sm:hidden'>
 						<SearchPhone setData={setDriversData} currentRef={starCountRef} currentType={currentDriversType} />
 					</div>
 
-					<DriversType set={setCurrentDriversType} currentType={currentDriversType}/>
+					<DriversType 
+						set={setCurrentDriversType} 
+						setLoading={setIsLoading}
+						currentType={currentDriversType}
+					/>
 
 				</div>
 

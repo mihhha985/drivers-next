@@ -39,6 +39,10 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 			console.log("Geolocation не поддерживается вашим браузером.");
 		}
 
+		setTimeout(() => {
+			map.setZoom(12);
+		}, 500);
+
 		return () => {	
 			handleClose();
 		}
@@ -73,12 +77,13 @@ const MapComponent = ({data, type}: {data:IDriversData[]|null, type:ButtonDriver
 			<Map
 				style={{width: '100%', height: '100%'}}
 				defaultCenter={defaultCenter}
-				defaultZoom={12}
+				defaultZoom={10}
+				maxZoom={16}
 				mapId={`${process.env.googleMapId}`}
 				fullscreenControl={false}
 				streetViewControl={false}
 				mapTypeControl={false}
-				zoomControl={false}
+				//zoomControl={false}
 			>
 				{data && data.map((marker, index) => {
 

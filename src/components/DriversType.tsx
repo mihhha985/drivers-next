@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import { ButtonDriversType } from '@/types/drivers';
-import { TiThMenu, TiDelete  } from "react-icons/ti";
 import { IoClose, IoReorderThreeOutline } from "react-icons/io5";
 import { getDatabase, ref, child, get } from "firebase/database";
 
@@ -29,7 +28,11 @@ function DriversType({set, currentType}: {set:Function, currentType:ButtonDriver
 
 		set(type);
 		setType(type);
-		map.setZoom(12);
+		map.setZoom(10);
+
+		setTimeout(() => {
+			map.setZoom(12);
+		}, 500);
 	}
 
 	const handleClick = ():void => {

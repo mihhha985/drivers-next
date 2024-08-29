@@ -29,3 +29,7 @@ body{
 .gm-style .gm-style-iw-tc{
 	top: -65px;
 } 
+
+.nano-content{
+	@apply bg-slate-200;
+}

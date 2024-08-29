@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Map from '@/components/Map';
 import { useEffect, useState } from 'react';
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, get, child } from "firebase/database";
 import { ButtonDriversType,	IDriversData } from '@/types/drivers';
 import SearchPhone from '@/components/SearchPhone';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -17,34 +17,49 @@ export default function Home() {
 	const starCountRef = ref(db, 'Drivers');
 	const [currentDriversType, setCurrentDriversType] = useState<ButtonDriversType>('man');
 	const [driversData, setDriversData] = useState<IDriversData[]| null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		const dbRef = ref(getDatabase());
+
 		onValue(starCountRef, (snapshot) => {
 			const data = snapshot.val();
 			const dataArr = Object.values(data) as IDriversData[];
 			//console.log(dataArr);
 			//сортировкка по доступности
-			const sortedItem = dataArr.filter((item: any) => item.state && item.state !== "") as IDriversData[];
+			const sortedItem = dataArr.filter((item: any) => item.state !== "") as IDriversData[];
 
-			//console.log(sortedItem)
+			//console.log(sortedItem);
+			let sortedByTime = sortedItem;
 			//сортировка по времени
-			
-			const sortedByTime = sortedItem.map((item: any) => {
-    		const currentTime = Math.round(Date.now() / 1000);
-    		const elapsedTime = currentTime - item.timestamp;
-				//console.log(elapsedTime);
-   			if(elapsedTime <= THIRTY_MINUTES) return item;
-			});
+			get(child(dbRef, 'preference'))
+			.then((snapshot) => {
+				if(snapshot.exists()) {
+					const data = snapshot.val();
+					let sortedByTime = sortedItem;
+					if(data.onClearMap) {
+						sortedByTime = sortedItem.map((item: any) => {
+							const currentTime = Math.round(Date.now() / 1000);
+							const elapsedTime = currentTime - item.timestamp;
+							//console.log(elapsedTime);
+							if(elapsedTime <= THIRTY_MINUTES) return item;
+						});
+					}
 
-			//console.log(sortedByTime);
-			//сортировка по типу
-			const sortedByType = sortedByTime.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
-			console.log(sortedByType);
-			if(sortedByType) setDriversData(sortedByType);
+					return sortedByTime;
+				}
+			})
+			.then(data => {
+				if(data !== undefined) {
+					const sortedByType = data.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
+					if(sortedByType) setDriversData(sortedByType);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 		});
 	}, [currentDriversType]);
-
 
 	const currentDataValue = ():string => {
 		switch (currentDriversType) {

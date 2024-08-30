@@ -19,46 +19,40 @@ export default function Home() {
 	const [driversData, setDriversData] = useState<IDriversData[]| null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	useEffect(() => {
+	const getPreference = async():Promise<boolean> => {
 		const dbRef = ref(getDatabase());
+		const snapshot = await get(child(dbRef, 'preference'));
+		const data = snapshot.val();
+		return data.onClearMap;
+	}
 
-		onValue(starCountRef, (snapshot) => {
-			const data = snapshot.val();
-			const dataArr = Object.values(data) as IDriversData[];
-			//console.log(dataArr);
-			//сортировкка по доступности
-			const sortedItem = dataArr.filter((item: any) => item.state !== "") as IDriversData[];
+	useEffect(() => {
+		async function fetchData() {
+			const preference = await getPreference();
+			onValue(starCountRef, (snapshot) => {
+				const data = snapshot.val();
+				const dataArr = Object.values(data) as IDriversData[];
+				//console.log(dataArr);
+				//сортировкка по доступности
+				const sortedItem = dataArr.filter((item: any) => item.state !== "") as IDriversData[];
 
-			//console.log(sortedItem);
-			let sortedByTime = sortedItem;
-			//сортировка по времени
-			get(child(dbRef, 'preference'))
-			.then((snapshot) => {
-				if(snapshot.exists()) {
-					const data = snapshot.val();
-					let sortedByTime = sortedItem;
-					if(data.onClearMap) {
-						sortedByTime = sortedItem.map((item: any) => {
-							const currentTime = Math.round(Date.now() / 1000);
-							const elapsedTime = currentTime - item.timestamp;
-							//console.log(elapsedTime);
-							if(elapsedTime <= THIRTY_MINUTES) return item;
-						});
-					}
-
-					return sortedByTime;
+				//console.log(sortedItem);
+				let sortedByTime = sortedItem;
+				if(preference) {
+					sortedByTime = sortedItem.map((item: any) => {
+						const currentTime = Math.round(Date.now() / 1000);
+						const elapsedTime = currentTime - item.timestamp;
+						//console.log(elapsedTime);
+						if(elapsedTime <= THIRTY_MINUTES) return item;
+					});
 				}
-			})
-			.then(data => {
-				if(data !== undefined) {
-					const sortedByType = data.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
-					if(sortedByType) setDriversData(sortedByType);
-				}
-			})
-			.catch((error) => {
-				console.error(error);
+				
+				const sortedByType = sortedByTime.filter((item: any) => item !== undefined && item.carCurrent === currentDriversType) as IDriversData[];
+				if(sortedByType) setDriversData(sortedByType);
 			});
-		});
+		}
+
+		fetchData();
 	}, [currentDriversType]);
 
 	const currentDataValue = ():string => {
